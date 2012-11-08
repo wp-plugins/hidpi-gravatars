@@ -1,6 +1,6 @@
 === HiDPI Gravatars ===
 Contributors: miqrogroove
-Tags: retina, hidpi, gravatar, gravatars, avatars
+Tags: retina, hidpi, gravatar, gravatars, avatars, iPad, iPhone, Kindle
 Requires at least: 2.8
 Tested up to: 3.4.2
 Stable tag: 1.0
@@ -25,6 +25,10 @@ Deactivation removes everything except the files you uploaded.  There is no "uni
 Theme development note:  You may not omit the wp_footer() tag for this plugin to work correctly.
 
 == Changelog ==
+
+= 1.1 =
+* Minor tweaks ...
+* Adjusted limits to include devices that have a 1.5 pixel ratio.
 
 = 1.0 =
 * Stable version, released 31 October 2012.

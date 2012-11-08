@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HiDPI Gravatars
  *
- * Description: Enables high resolution Gravatar images on any browsers that support them.
+ * Description: Enables high resolution Gravatar images on any browser that supports them.
  *
  * This plugin does not make any permanent changes.
  *
@@ -10,7 +10,7 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin (miqrogroove)
- * @version: 1.0
+ * @version: 1.1 (in development)
  * @copyright Copyright © 2012 by Robert Chapin
  * @license GPL
  *
@@ -70,7 +70,7 @@ function miqro_hidpi_gravatars_admin() {
     $done = TRUE;
 
     // Include the script.
-    $src = plugins_url('hidpi-gravatars.js', __FILE__) . '?ver=1.0';
+    $src = plugins_url('hidpi-gravatars.js', __FILE__) . '?ver=1.1';
     echo "<script type='text/javascript' src='$src'></script>\n";
 }
 ?>

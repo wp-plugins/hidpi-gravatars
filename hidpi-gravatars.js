@@ -1,5 +1,5 @@
 /* HiDPI Gravatar Loader © 2012 by Robert Chapin, license: GPL */
-if (window.devicePixelRatio > 1.5) {
+if (window.devicePixelRatio > 1.4) {
  avatars = document.getElementsByClassName('avatar');
  for (var i = 0; i < avatars.length; i++) {
   if (avatars[i].tagName != 'IMG') continue;
