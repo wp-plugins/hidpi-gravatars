@@ -1,9 +1,9 @@
 === HiDPI Gravatars ===
 Contributors: miqrogroove
-Tags: retina, hidpi, gravatar, gravatars, avatars, iPad, iPhone, Kindle
+Tags: retina, hidpi, gravatar, gravatars, avatar, avatars, iPad, iPhone, Kindle
 Requires at least: 2.8
 Tested up to: 3.4.2
-Stable tag: 1.0
+Stable tag: 1.1
 
 Enables high resolution Gravatar images on any browser that supports them.
 
@@ -11,7 +11,7 @@ Enables high resolution Gravatar images on any browser that supports them.
 
 Automatically replaces the standard resolution Gravatars with HiDPI (Retina) Gravatars using Javascript.
 
-You need this plugin if you want blog comments to look crisp and clear on Retina and similar devices!
+You need this plugin if you want blog comments to look crisp and clear on Retina, HD, and similar devices!
 
 == Installation ==
 
@@ -27,8 +27,9 @@ Theme development note:  You may not omit the wp_footer() tag for this plugin to
 == Changelog ==
 
 = 1.1 =
-* Minor tweaks ...
-* Adjusted limits to include devices that have a 1.5 pixel ratio.
+* Compatibility fix, released 10 November 2012.
+* Adjusted to include devices that have a 1.5:1 pixel ratio.
+* Tested on Kindle Fire HD emulator.
 
 = 1.0 =
 * Stable version, released 31 October 2012.
