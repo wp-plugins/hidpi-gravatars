@@ -10,7 +10,7 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin (miqrogroove)
- * @version: 1.1
+ * @version: 1.2
  * @copyright Copyright © 2012 by Robert Chapin
  * @license GPL
  *
@@ -36,7 +36,7 @@ if (!function_exists('get_bloginfo')) {
 }
 
 add_action('wp_enqueue_scripts', 'miqro_hidpi_gravatars', 10, 0);
-add_action('admin_enqueue_scripts', 'miqro_hidpi_gravatars', 10, 0);
+add_action('admin_init', 'miqro_hidpi_gravatars', 10, 0); // Ajax compatible
 
 
 /* Plugin Functions */
@@ -49,7 +49,11 @@ add_action('admin_enqueue_scripts', 'miqro_hidpi_gravatars', 10, 0);
 function miqro_hidpi_gravatars() {
     if (is_admin()) {
 
-        add_action('admin_footer', 'miqro_hidpi_gravatars_admin', 1001, 0); // Priority must be > 1000, see wp-includes/admin-bar.php
+        if (empty($_COOKIE['miqro_hidpi'])) {
+            add_action('admin_footer', 'miqro_hidpi_gravatars_admin', 1001, 0); // Priority must be > 1000, see wp-includes/admin-bar.php
+        } else {
+            add_filter('get_avatar', 'miqro_hidpi_gravatars_filter', 10, 1);
+        }
 
     } elseif (is_singular() or function_exists('is_admin_bar_showing') and is_admin_bar_showing()) {
 
@@ -70,7 +74,32 @@ function miqro_hidpi_gravatars_admin() {
     $done = TRUE;
 
     // Include the script.
-    $src = plugins_url('hidpi-gravatars.js', __FILE__) . '?ver=1.1';
+    $src = plugins_url('hidpi-gravatars.js', __FILE__) . '?ver=1.2';
     echo "<script type='text/javascript' src='$src'></script>\n";
+}
+
+/**
+ * Performs sever-side avatar filtering.
+ *
+ * @param string $input The IMG element for one avatar.
+ * @return string
+ * @since 1.2
+ */
+function miqro_hidpi_gravatars_filter($input) {
+    if (FALSE === strpos($input, '.gravatar.com')) return;
+    $temp = strpos($input, '&s=');
+    if (FALSE === $temp) $temp = strpos($input, '?s=');
+    if (FALSE === $temp) return;
+    $temp += 3;
+    $size = intval(substr($input, $temp));
+    $output = substr($input, 0, $temp) . $size * 2 . substr($input, $temp + strlen($size));
+    $temp = strpos($output, '%3Fs%3D');
+    if (FALSE === $temp) $temp = strpos($output, '%26s%3D');
+    if (FALSE !== $temp) {
+        $temp += 7;
+        $size = intval(substr($output, $temp));
+        $output = substr($output, 0, $temp) . $size * 2 . substr($output, $temp + strlen($size));
+    }
+    return $output;
 }
 ?>
