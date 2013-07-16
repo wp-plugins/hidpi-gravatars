@@ -2,7 +2,7 @@
 Contributors: miqrogroove
 Tags: retina, hidpi, gravatar, gravatars, avatar, avatars, iPad, iPhone, Kindle
 Requires at least: 2.8
-Tested up to: 3.5
+Tested up to: 3.6
 Stable tag: 1.3
 
 Enables high resolution Gravatar images on any browser that supports them.
@@ -32,6 +32,7 @@ Personal avatar note:  For best results when uploading a new avatar, use an imag
 * Added a definable trigger for theme and plugin authors to use as needed.
 * Added troubleshooting documentation.
 * WordPress 3.5-RC1 tested.
+* WordPress 3.6-RC1 tested 16 July 2013.
 
 = 1.2 =
 * Bug fixes, released 16 November 2012.
