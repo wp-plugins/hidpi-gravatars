@@ -1,5 +1,13 @@
-/* HiDPI Gravatar Loader © 2012 by Robert Chapin, license: GPL */
+/* HiDPI Gravatar Loader © 2012-2015 by Robert Chapin, license: GPL */
 if (window.devicePixelRatio > 1.4) {
+ if (document.cookie.indexOf('miqro_srcset=') < 0) {
+  miqro_srcset_detection();
+ } else if (document.cookie.indexOf('miqro_srcset=no') >= 0) {
+  miqro_hidpi_gravatars();
+ }
+ document.cookie = 'miqro_hidpi=yes';
+}
+function miqro_hidpi_gravatars() {
  avatars = document.getElementsByClassName('avatar');
  for (var i = 0; i < avatars.length; i++) {
   if (avatars[i].tagName != 'IMG') continue;
@@ -20,5 +28,14 @@ if (window.devicePixelRatio > 1.4) {
   }
   avatars[i].src = hidpi;
  }
- document.cookie = 'miqro_hidpi=yes';
+}
+function miqro_srcset_detection() {
+ testimg = document.createElement("IMG");
+ supported = '' == testimg.srcset;
+ if ( supported ) {
+  document.cookie = 'miqro_srcset=yes';
+ } else {
+  miqro_hidpi_gravatars();
+  document.cookie = 'miqro_srcset=no';
+ }
 }
