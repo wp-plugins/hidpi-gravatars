@@ -40,7 +40,7 @@ Personal avatar note:  For best results when uploading a new avatar, use an imag
 * Added detection of srcset support in new browsers.
 * Javascript manipulation is minimized when srcset can be used.
 * Falls back gracefully to JS code in older HiDPI browsers.
-* Upgrade Note: Cached pages will not be HiDPI until regenerated.  Please check your settings if you have a server-side cache plugin.
+* Upgrade Note: Cached pages might be LoDPI after switching from 1.3 to 1.4. This is fixed in 1.4.1.
 
 = 1.3 =
 * Compatibility improvement, released 23 November 2012.
