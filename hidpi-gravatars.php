@@ -10,7 +10,7 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin
- * @version: 1.4.1
+ * @version: 1.4.2
  * @copyright Copyright © 2012-2015 by Robert Chapin
  * @license GPL
  *
@@ -62,7 +62,7 @@ function miqro_hidpi_gravatars() {
 		add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
 		add_action('wp_footer', 'miqro_hidpi_gravatars_admin', 1001, 0);
 
-    } else {
+	} else {
 
 		add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
 		add_filter('get_avatar', 'miqro_hidpi_gravatars_detect', 10, 1);
@@ -83,7 +83,7 @@ function miqro_hidpi_gravatars_admin() {
 	$done = TRUE;
 
 	// Include the script.
-	$src = plugins_url('hidpi-gravatars-v14.js', __FILE__) . '?ver=1.4.1';
+	$src = plugins_url('hidpi-gravatars-v14.js', __FILE__) . '?ver=1.4.2';
 	echo "<script type='text/javascript' src='$src'></script>\n";
 }
 
@@ -96,11 +96,16 @@ function miqro_hidpi_gravatars_admin() {
  * @return string
  */
 function miqro_hidpi_gravatars_filter($input) {
-	if (FALSE === strpos($input, '.gravatar.com')) return;
-	$temp = strpos($input, '&s=');
-	if (FALSE === $temp) $temp = strpos($input, '?s=');
-	if (FALSE === $temp) return;
-	$temp += 3;
+	if (FALSE === strpos($input, '.gravatar.com')) return $input;
+	$delimeters = array( '?s=', '&#038;s=', '&amp;s=', '&s=' );
+	foreach ($delimeters as $delim) {
+		$temp = strpos($input, $delim);
+		if (FALSE !== $temp) {
+			$temp += strlen($delim);
+			break;
+		}
+	}
+	if (FALSE === $temp) return $input;
 	$size = intval(substr($input, $temp));
 	$output = substr($input, 0, $temp) . $size * 2 . substr($input, $temp + strlen($size));
 	$temp = strpos($output, '%3Fs%3D');
@@ -170,10 +175,15 @@ function miqro_hidpi_gravatars_srcset($input) {
 	$url = substr($input, $start, $end - $start);
 	
 	// Generate 2x URL.
-	$temp = strpos($url, '&s=', $start);
-	if (FALSE === $temp) $temp = strpos($url, '?s=', $start);
+	$delimeters = array( '?s=', '&#038;s=', '&amp;s=', '&s=' );
+	foreach ($delimeters as $delim) {
+		$temp = strpos($url, $delim);
+		if (FALSE !== $temp) {
+			$temp += strlen($delim);
+			break;
+		}
+	}
 	if (FALSE === $temp) return $input;
-	$temp += 3;
 	$size = intval(substr($url, $temp));
 	$url2 = substr($url, 0, $temp) . $size * 2 . substr($url, $temp + strlen($size));
 	$temp = strpos($url2, '%3Fs%3D');
