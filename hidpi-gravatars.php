@@ -10,7 +10,7 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin
- * @version: 1.4
+ * @version: 1.4.1
  * @copyright Copyright © 2012-2015 by Robert Chapin
  * @license GPL
  *
@@ -31,8 +31,8 @@
 /* Plugin Bootup */
 
 if (!function_exists('get_bloginfo')) {
-    header('HTTP/1.0 403 Forbidden');
-    exit("Not allowed to run this file directly.");
+	header('HTTP/1.0 403 Forbidden');
+	exit("Not allowed to run this file directly.");
 }
 
 add_action('wp_enqueue_scripts', 'miqro_hidpi_gravatars', 10, 0);
@@ -47,28 +47,28 @@ add_action('admin_init', 'miqro_hidpi_gravatars', 10, 0); // Ajax compatible
  * @since 1.0
  */
 function miqro_hidpi_gravatars() {
-    if (is_admin()) {
+	if (is_admin()) {
 
-        if (empty($_COOKIE['miqro_hidpi'])) {
+		if (empty($_COOKIE['miqro_hidpi'])) {
 			add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
-            add_action('admin_footer', 'miqro_hidpi_gravatars_admin', 1001, 0); // Priority must be > 1000, see default-filters.php
-        } else {
+			add_action('admin_footer', 'miqro_hidpi_gravatars_admin', 1001, 0); // Priority must be > 1000, see default-filters.php
+		} else {
 			// Fall back to old HTML filter for simplicity when not caching pages.  The pre_get_avatar_data filter doesn't support display sizes as of r31473.
-            add_filter('get_avatar', 'miqro_hidpi_gravatars_filter', 10, 1);
-        }
+			add_filter('get_avatar', 'miqro_hidpi_gravatars_filter', 10, 1);
+		}
 
-    } elseif (function_exists('is_admin_bar_showing') and is_admin_bar_showing()) {
+	} elseif (function_exists('is_admin_bar_showing') and is_admin_bar_showing()) {
 
 		add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
-        add_action('wp_footer', 'miqro_hidpi_gravatars_admin', 1001, 0);
+		add_action('wp_footer', 'miqro_hidpi_gravatars_admin', 1001, 0);
 
     } else {
 
 		add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
-        add_filter('get_avatar', 'miqro_hidpi_gravatars_detect', 10, 1);
-        add_action('wp_footer', 'miqro_hidpi_gravatars_check', 1001, 0);
+		add_filter('get_avatar', 'miqro_hidpi_gravatars_detect', 10, 1);
+		add_action('wp_footer', 'miqro_hidpi_gravatars_check', 1001, 0);
 
-    }
+	}
 }
 
 /**
@@ -77,14 +77,14 @@ function miqro_hidpi_gravatars() {
  * @since 1.0
  */
 function miqro_hidpi_gravatars_admin() {
-    // Avoid multiple inclusions.
-    static $done = FALSE;
-    if ($done) return;
-    $done = TRUE;
+	// Avoid multiple inclusions.
+	static $done = FALSE;
+	if ($done) return;
+	$done = TRUE;
 
-    // Include the script.
-    $src = plugins_url('hidpi-gravatars.js', __FILE__) . '?ver=1.4';
-    echo "<script type='text/javascript' src='$src'></script>\n";
+	// Include the script.
+	$src = plugins_url('hidpi-gravatars-v14.js', __FILE__) . '?ver=1.4.1';
+	echo "<script type='text/javascript' src='$src'></script>\n";
 }
 
 /**
@@ -96,21 +96,21 @@ function miqro_hidpi_gravatars_admin() {
  * @return string
  */
 function miqro_hidpi_gravatars_filter($input) {
-    if (FALSE === strpos($input, '.gravatar.com')) return;
-    $temp = strpos($input, '&s=');
-    if (FALSE === $temp) $temp = strpos($input, '?s=');
-    if (FALSE === $temp) return;
-    $temp += 3;
-    $size = intval(substr($input, $temp));
-    $output = substr($input, 0, $temp) . $size * 2 . substr($input, $temp + strlen($size));
-    $temp = strpos($output, '%3Fs%3D');
-    if (FALSE === $temp) $temp = strpos($output, '%26s%3D');
-    if (FALSE !== $temp) {
-        $temp += 7;
-        $size = intval(substr($output, $temp));
-        $output = substr($output, 0, $temp) . $size * 2 . substr($output, $temp + strlen($size));
-    }
-    return $output;
+	if (FALSE === strpos($input, '.gravatar.com')) return;
+	$temp = strpos($input, '&s=');
+	if (FALSE === $temp) $temp = strpos($input, '?s=');
+	if (FALSE === $temp) return;
+	$temp += 3;
+	$size = intval(substr($input, $temp));
+	$output = substr($input, 0, $temp) . $size * 2 . substr($input, $temp + strlen($size));
+	$temp = strpos($output, '%3Fs%3D');
+	if (FALSE === $temp) $temp = strpos($output, '%26s%3D');
+	if (FALSE !== $temp) {
+		$temp += 7;
+		$size = intval(substr($output, $temp));
+		$output = substr($output, 0, $temp) . $size * 2 . substr($output, $temp + strlen($size));
+	}
+	return $output;
 }
 
 /**
@@ -124,10 +124,10 @@ function miqro_hidpi_gravatars_filter($input) {
  * @return string
  */
 function miqro_hidpi_gravatars_detect($input = '') {
-    add_action('wp_footer', 'miqro_hidpi_gravatars_admin', 1001, 0);
-    remove_filter('get_avatar', 'miqro_hidpi_gravatars_detect', 10, 1);
-    remove_action('wp_footer', 'miqro_hidpi_gravatars_check', 1001, 0);
-    return $input;
+	add_action('wp_footer', 'miqro_hidpi_gravatars_admin', 1001, 0);
+	remove_filter('get_avatar', 'miqro_hidpi_gravatars_detect', 10, 1);
+	remove_action('wp_footer', 'miqro_hidpi_gravatars_check', 1001, 0);
+	return $input;
 }
 
 /**
@@ -150,11 +150,11 @@ function miqro_hidpi_gravatars_check() {
  * @return string
  */
 function miqro_hidpi_gravatars_srcset($input) {
-    if (FALSE === strpos($input, '.gravatar.com')) return $input;
+	if (FALSE === strpos($input, '.gravatar.com')) return $input;
 	
 	// Find original URL.
-    $start = strpos($input, "src='");
-    if (FALSE === $start) {
+	$start = strpos($input, "src='");
+	if (FALSE === $start) {
 		$start = strpos($input, 'src="');
 		if (FALSE === $start) {
 			return $input;
@@ -165,28 +165,28 @@ function miqro_hidpi_gravatars_srcset($input) {
 		$delim = "'";
 	}
 	$start += 5;
-    $end = strpos($input, $delim, $start);
-    if (FALSE === $end) return $input;
+	$end = strpos($input, $delim, $start);
+	if (FALSE === $end) return $input;
 	$url = substr($input, $start, $end - $start);
 	
 	// Generate 2x URL.
-    $temp = strpos($url, '&s=', $start);
-    if (FALSE === $temp) $temp = strpos($url, '?s=', $start);
-    if (FALSE === $temp) return $input;
-    $temp += 3;
-    $size = intval(substr($url, $temp));
-    $url2 = substr($url, 0, $temp) . $size * 2 . substr($url, $temp + strlen($size));
-    $temp = strpos($url2, '%3Fs%3D');
-    if (FALSE === $temp) $temp = strpos($url2, '%26s%3D');
-    if (FALSE !== $temp) {
-        $temp += 7;
-        $size = intval(substr($url2, $temp));
-        $url2 = substr($url2, 0, $temp) . $size * 2 . substr($url2, $temp + strlen($size));
-    }
+	$temp = strpos($url, '&s=', $start);
+	if (FALSE === $temp) $temp = strpos($url, '?s=', $start);
+	if (FALSE === $temp) return $input;
+	$temp += 3;
+	$size = intval(substr($url, $temp));
+	$url2 = substr($url, 0, $temp) . $size * 2 . substr($url, $temp + strlen($size));
+	$temp = strpos($url2, '%3Fs%3D');
+	if (FALSE === $temp) $temp = strpos($url2, '%26s%3D');
+	if (FALSE !== $temp) {
+		$temp += 7;
+		$size = intval(substr($url2, $temp));
+		$url2 = substr($url2, 0, $temp) . $size * 2 . substr($url2, $temp + strlen($size));
+	}
 
 	// Insert srcset attribute.
-	$srcset = " srcset='$url 1x, $url2 2x'";
+	$srcset = " srcset='$url2 2x'";
 	
-    return substr($input, 0, $end + 1) . $srcset . substr($input, $end + 1);
+	return substr($input, 0, $end + 1) . $srcset . substr($input, $end + 1);
 }
 ?>

@@ -3,7 +3,7 @@ Contributors: miqrogroove
 Tags: retina, hidpi, gravatar, gravatars, avatar, avatars, iPad, iPhone, Kindle
 Requires at least: 2.8
 Tested up to: 4.1
-Stable tag: 1.4
+Stable tag: 1.4.1
 
 Enables high resolution Gravatar images on any browser that supports them.
 
@@ -25,6 +25,11 @@ Deactivation removes everything except the files you uploaded.  There is no "uni
 Personal avatar note:  For best results when uploading a new avatar, use an image at least 128 x 128 pixels in size.  The old "standard" size of 80 pixels will be inadequate on Retina displays.
 
 == Changelog ==
+
+= 1.4.1 =
+* Fixed upgrade issues, released 19 February 2015.
+* Reverted old JS file so it wont interfere with old cached pages.
+* Removed extra '1x' code to better match the W3C draft.
 
 = 1.4 =
 * Enhanced for newer browsers, released 19 February 2015.
