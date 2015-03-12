@@ -1,9 +1,9 @@
 === HiDPI Gravatars ===
 Contributors: miqrogroove
-Tags: retina, hidpi, gravatar, gravatars, avatar, avatars, iPad, iPhone, Kindle
-Requires at least: 2.8
-Tested up to: 4.1
-Stable tag: 1.4.2
+Tags: retina, hidpi, gravatar, gravatars, avatar, avatars, iPad, iPhone, Kindle, Surface
+Requires at least: 3.1
+Tested up to: 4.2
+Stable tag: 1.5
 
 Enables high resolution Gravatar images on any browser that supports them.
 
@@ -12,6 +12,8 @@ Enables high resolution Gravatar images on any browser that supports them.
 Automatically replaces the standard resolution Gravatars with HiDPI (Retina) Gravatars using HTML (when supported) or Javascript (as needed).
 
 You need this plugin if you want blog comments to look crisp and clear on Retina, HD, and similar devices!
+
+You need this plugin if you want compatibility with all web browsers.  The HiDPI features added in WordPress 4.2 are not compatible with older browsers, unless you have this plugin activated.  The included Javascript helps make your website look the same in new and old browsers.
 
 == Installation ==
 
@@ -25,6 +27,14 @@ Deactivation removes everything except the files you uploaded.  There is no "uni
 Personal avatar note:  For best results when uploading a new avatar, use an image at least 128 x 128 pixels in size.  The old "standard" size of 80 pixels will be inadequate on Retina displays.
 
 == Changelog ==
+
+= 1.5 =
+* Updated for WordPress 4.2, released 12 March 2015.
+* New logic adds compatibility with WordPress 4.2 alpha and future releases.
+* Old logic kept to also support old browsers that need this plugin even in WordPress 4.2.
+* Now always using srcset on admin pages when a supported browser is detected.
+* Removed the custom trigger, which was not compatible with the new srcset features.
+* Dropped support for WordPress less than 3.1.
 
 = 1.4.2 =
 * Fixed a minor bug, released 19 February 2015.
@@ -40,7 +50,7 @@ Personal avatar note:  For best results when uploading a new avatar, use an imag
 * Added detection of srcset support in new browsers.
 * Javascript manipulation is minimized when srcset can be used.
 * Falls back gracefully to JS code in older HiDPI browsers.
-* Upgrade Note: Cached pages will not be HiDPI until regenerated.  Please check your settings if you have a server-side cache plugin.
+* Upgrade Note: Cached pages might be LoDPI after switching from 1.3 to 1.4. This is fixed in 1.4.1.
 
 = 1.3 =
 * Compatibility improvement, released 23 November 2012.
@@ -82,16 +92,8 @@ HiDPI Gravatars is designed to be fully compatible with page caching plugins suc
 
 Pages that were cached prior to activating HiDPI Gravatars will need to be refreshed.  Empty the cache to make sure the new Gravatars will appear.
 
+HiDPI Gravatars is *not* compatible with any Gravatar caching plugins.
+
 == Other Gravatar Plugins ==
 
-HiDPI Gravatars might not detect customized Gravatar functions in other plugins.  For extra flexibility, I made it possible for a theme or plugin to trigger the HiDPI Gravatars on a specific page using this code:  
-
-`
-<?php define('MIQRO_HIDPI_THIS_PAGE', TRUE); ?>
-
-`
-For most websites this will *not* be necessary.
-
-Plugin authors: If you are not implementing the WordPress [get_avatar](http://codex.wordpress.org/Function_Reference/get_avatar) filter, then you will need to add my code (as above) whenever a Gravatar is output.  Either method should make your plugin compatible.  Note, however, only the get_avatar filter is ajax compatible.
-
-In any case, HiDPI Gravatars is *not* compatible with any Gravatar cache plugins.
+HiDPI Gravatars might not detect customized Gravatar functions in other plugins.  As of version 1.4, HiDPI Gravatars relies on the WordPress [get_avatar](http://codex.wordpress.org/Function_Reference/get_avatar) filter.  Custom avatar generators that avoid or disable this filter will be ignored by HiDPI Gravatars.

@@ -10,7 +10,7 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin
- * @version: 1.4.2
+ * @version: 1.5
  * @copyright Copyright © 2012-2015 by Robert Chapin
  * @license GPL
  *
@@ -42,32 +42,46 @@ add_action('admin_init', 'miqro_hidpi_gravatars', 10, 0); // Ajax compatible
 /* Plugin Functions */
 
 /**
- * Inserts the javascript link for this plugin when appropriate.
+ * Hooks the needed filters and actions based on page type.
  *
  * @since 1.0
  */
 function miqro_hidpi_gravatars() {
-	if (is_admin()) {
-
-		if (empty($_COOKIE['miqro_hidpi'])) {
-			add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
-			add_action('admin_footer', 'miqro_hidpi_gravatars_admin', 1001, 0); // Priority must be > 1000, see default-filters.php
-		} else {
-			// Fall back to old HTML filter for simplicity when not caching pages.  The pre_get_avatar_data filter doesn't support display sizes as of r31473.
-			add_filter('get_avatar', 'miqro_hidpi_gravatars_filter', 10, 1);
-		}
-
-	} elseif (function_exists('is_admin_bar_showing') and is_admin_bar_showing()) {
-
-		add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
-		add_action('wp_footer', 'miqro_hidpi_gravatars_admin', 1001, 0);
-
+	// Collect environment info.
+	$nocookie = empty($_COOKIE['miqro_hidpi']);
+	if (!$nocookie and !empty($_COOKIE['miqro_srcset'])) {
+		$modern = 'yes' == $_COOKIE['miqro_srcset'];
 	} else {
+		$modern = false;
+	}
+	$easy = version_compare(get_bloginfo('version'), '4.2-alpha-31722', '>=');
+	$admin = is_admin();
 
-		add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
+	// Add the srcset attribute except for HiDPI admin pages sent to older browsers.
+	if ( $modern or $nocookie or !$admin ) {
+		if (!$easy) {
+			add_filter('get_avatar', 'miqro_hidpi_gravatars_srcset', 10, 1);
+		}
+	} elseif ($easy) {
+		// Force 2x static avatars using new filters.  Ajax compatible in old browsers.
+		add_filter('pre_get_avatar_data', 'miqro_hidpi_gravatars_data', 10, 1);
+	} else {
+		// Fall back to old HTML filter.  Ajax compatible in old browsers.
+		add_filter('get_avatar', 'miqro_hidpi_gravatars_filter', 10, 1);
+	}
+
+	// Add Javascript when needed.
+	if ($admin) {
+		if ($nocookie) {
+			// Javascript for client detection.
+			add_action('admin_footer', 'miqro_hidpi_gravatars_admin', 1001, 0); // Priority must be > 1000, see default-filters.php
+		}
+	} elseif (is_admin_bar_showing()) {
+		// Javascript for clients that don't support srcset.
+		add_action('wp_footer', 'miqro_hidpi_gravatars_admin', 1001, 0);
+	} else {
+		// Detect pages that have avatars.
 		add_filter('get_avatar', 'miqro_hidpi_gravatars_detect', 10, 1);
-		add_action('wp_footer', 'miqro_hidpi_gravatars_check', 1001, 0);
-
 	}
 }
 
@@ -77,13 +91,7 @@ function miqro_hidpi_gravatars() {
  * @since 1.0
  */
 function miqro_hidpi_gravatars_admin() {
-	// Avoid multiple inclusions.
-	static $done = FALSE;
-	if ($done) return;
-	$done = TRUE;
-
-	// Include the script.
-	$src = plugins_url('hidpi-gravatars-v14.js', __FILE__) . '?ver=1.4.2';
+	$src = plugins_url('hidpi-gravatars-v14.js', __FILE__) . '?ver=1.5';
 	echo "<script type='text/javascript' src='$src'></script>\n";
 }
 
@@ -131,19 +139,7 @@ function miqro_hidpi_gravatars_filter($input) {
 function miqro_hidpi_gravatars_detect($input = '') {
 	add_action('wp_footer', 'miqro_hidpi_gravatars_admin', 1001, 0);
 	remove_filter('get_avatar', 'miqro_hidpi_gravatars_detect', 10, 1);
-	remove_action('wp_footer', 'miqro_hidpi_gravatars_check', 1001, 0);
 	return $input;
-}
-
-/**
- * Allow a theme or other plugin to trigger HiDPI.
- *
- * Implement like <?php define('MIQRO_HIDPI_THIS_PAGE', TRUE); ?>
- *
- * @since 1.3
- */
-function miqro_hidpi_gravatars_check() {
-    if (defined('MIQRO_HIDPI_THIS_PAGE')) miqro_hidpi_gravatars_admin();
 }
 
 /**
@@ -198,5 +194,18 @@ function miqro_hidpi_gravatars_srcset($input) {
 	$srcset = " srcset='$url2 2x'";
 	
 	return substr($input, 0, $end + 1) . $srcset . substr($input, $end + 1);
+}
+
+/**
+ * Performs sever-side avatar args filtering.
+ *
+ * @since 1.5
+ *
+ * @param array $args The inputs that were given to get_avatar_data().
+ * @return array
+ */
+function miqro_hidpi_gravatars_data($args) {
+    $args['size'] *= 2;
+    return $args;
 }
 ?>
