@@ -10,7 +10,7 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin
- * @version: 1.5
+ * @version: 1.5.1
  * @copyright Copyright © 2012-2015 by Robert Chapin
  * @license GPL
  *
@@ -91,7 +91,7 @@ function miqro_hidpi_gravatars() {
  * @since 1.0
  */
 function miqro_hidpi_gravatars_admin() {
-	$src = plugins_url('hidpi-gravatars-v14.js', __FILE__) . '?ver=1.5';
+	$src = plugins_url('hidpi-gravatars-v14.js', __FILE__) . '?ver=1.5.1';
 	echo "<script type='text/javascript' src='$src'></script>\n";
 }
 

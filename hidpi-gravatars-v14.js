@@ -1,5 +1,5 @@
 /* HiDPI Gravatar Loader © 2012-2015 by Robert Chapin, license: GPL */
-if (window.devicePixelRatio > 1.4) {
+if ((window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI) > 1.4) {
  if (document.cookie.indexOf('miqro_srcset=') < 0) {
   miqro_srcset_detection();
  } else if (document.cookie.indexOf('miqro_srcset=no') >= 0) {
